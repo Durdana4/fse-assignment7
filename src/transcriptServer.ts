@@ -45,8 +45,7 @@ export default function addTranscriptServerRoutes(app: Express) {
     const theTranscript = db.getTranscript(parseInt(id));
     if (theTranscript === undefined) {
       res.status(404).send(`No student with id = ${id}`);
-    }
-    {
+    } else {
       res.status(200).send(theTranscript);
     }
   });

@@ -1,31 +1,25 @@
-name: CI Pipeline # This is the name of your workflow
+name: CI Pipeline
 
-# When to run the workflow: on every push and pull request
 on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest # The OS the jobs will run on
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your code from the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Set up the correct version of Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Use the version your project needs (16, 18, 20 are common)
+          node-version: '18'
 
-      # Step 3: Install your project dependencies (from package.json)
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run the automated tests (this runs the 'npm test' script)
       - name: Run tests
         run: npm test
 
-      # Step 5: Run ESLint (this runs the 'npm run lint' script)
       - name: Run ESLint
         run: npm run lint

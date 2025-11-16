@@ -1,11 +1,11 @@
-import Express from 'express';
+import express from 'express';
 import addTranscriptServerRoutes from './transcriptServer';
 
 // app-specific packages
 import * as db from './transcriptManager';
 
 // create the server, call it app
-const app = Express();
+const app = express();
 
 // the port to listen on
 const inputPort = process.env.PORT || 4001;

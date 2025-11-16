@@ -48,36 +48,37 @@ export function addStudent(name: string, grades: CourseGrade[] = []): StudentID 
 }
 
 // gets transcript for given ID.  Returns undefined if missing
-export function getTranscript(studentID: number): Transcript {
-  return allTranscripts.find(transcript => transcript.student.studentID == studentID);
+export function getTranscript(studentID: number): Transcript | undefined {
+  return allTranscripts.find(transcript => transcript.student.studentID === studentID);
 }
 
 // gets studentIDs matching a given name
 export function getStudentIDs(studentName: string): StudentID[] {
   return allTranscripts
-    .filter(transcript => transcript.student.studentName == studentName)
+    .filter(transcript => transcript.student.studentName === studentName)
     .map(transcript => transcript.student.studentID);
 }
 
 // deletes student with the given ID from the database.
 // throws exception if no such student.  (Is this the best idea?)
 export function deleteStudent(studentID: StudentID): void {
-  const index = allTranscripts.findIndex(t => t.student.studentID == studentID);
-  if (index == -1) {
+  const index = allTranscripts.findIndex(t => t.student.studentID === studentID);
+  if (index === -1) {
     throw new Error(`no student with ID = ${studentID}`);
   }
   allTranscripts.splice(index, 1);
 }
 
 export function addGrade(studentID: StudentID, course: Course, grade: number): void {
-  const tIndex = allTranscripts.findIndex(t => t.student.studentID == studentID);
-  if (tIndex == -1) {
+  const tIndex = allTranscripts.findIndex(t => t.student.studentID === studentID);
+  if (tIndex === -1) {
     throw new Error(`no student with ID = ${studentID}`);
   }
   const theTranscript = allTranscripts[tIndex];
   try {
     allTranscripts[tIndex] = addGradeToTranscript(theTranscript, course, grade);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     throw new Error(`student ${studentID} already has a grade in course ${course}`);
   }
 }
@@ -90,7 +91,7 @@ function addGradeToTranscript(
   grade: number,
 ): Transcript {
   const { grades } = theTranscript;
-  if (grades.findIndex(entry => entry.course === course) != -1) {
+  if (grades.findIndex(entry => entry.course === course) !== -1) {
     throw new Error();
   }
   return { student: theTranscript.student, grades: grades.concat({ course, grade }) };
@@ -99,8 +100,11 @@ function addGradeToTranscript(
 // returns the grade for the given student in the given course.
 // throws an error if no such student or no such course for that student
 export function getGrade(studentID: StudentID, course: Course): number {
-  const theTranscript = allTranscripts.find(t => t.student.studentID == studentID);
-  const theGrade = theTranscript.grades.find(g => g.course == course);
+  const theTranscript = allTranscripts.find(t => t.student.studentID === studentID);
+  if (!theTranscript) {
+    throw new Error(`no student with id = ${studentID}`);
+  }
+  const theGrade = theTranscript.grades.find(g => g.course === course);
   if (theGrade === undefined) {
     throw new Error(`no grade for student ${studentID} in course ${course}`);
   }
