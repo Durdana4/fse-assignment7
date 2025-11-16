@@ -1,3 +1,4 @@
+// FSE Assignment 7 - CI/CD with GitHub Actions
 // manage the transcript database
 export type StudentID = number;
 export type Student = { studentID: number; studentName: string };
